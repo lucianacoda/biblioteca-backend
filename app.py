@@ -1,13 +1,14 @@
 from datetime import datetime as dt
-
 from flask import Flask, request, jsonify
-from models import db, Aluno, Livro, Emprestimo, AlunoSchema, LivroSchema, EmprestimoSchema, APIReturn
+from flask_cors import CORS
 from flasgger import Swagger
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from models import db, Aluno, Livro, Emprestimo, AlunoSchema, LivroSchema, EmprestimoSchema, APIReturn
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db.init_app(app)
+CORS(app)
 swagger_template = {
     "swagger": "2.0",
     "info": {
@@ -222,7 +223,7 @@ def devolver():
         emprestimo.devolvido_em_atraso = emprestimo.data_limite_devolucao < emprestimo.data_devolucao
         suffix = ", porém em atraso." if emprestimo.devolvido_em_atraso == True else "."
         db.session.commit()
-        return jsonify(APIReturn(_id=emprestimo.id, _message=f"Livro devolvido com sucesso{suffix}").to_dict()), 201
+        return jsonify(APIReturn(_id=emprestimo.id, _message=f"Livro devolvido com sucesso{suffix}").to_dict()), 200
     except Exception as e:
         db.session.rollback()
         return jsonify(e), 500
