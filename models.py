@@ -53,6 +53,7 @@ class EmprestimoSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Emprestimo
         load_instance = True
+        include_fk = True
 
 class APIReturn:
     def __init__(self, _message: str, _id: int=None):
