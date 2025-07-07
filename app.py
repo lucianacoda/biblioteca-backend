@@ -175,7 +175,7 @@ def emprestar():
         data = request.json
         livro = Livro.query.get_or_404(data['livro_id'])
         if not livro or not livro.disponivel:
-            return jsonify(APIReturn(_message= 'Erro: Livro não disponível.')), 400
+            return jsonify(APIReturn(_message= 'Erro: Livro não disponível.').to_dict()), 400
         emprestimo = Emprestimo(
             aluno_id=data['aluno_id'],
             livro_id=data['livro_id']
